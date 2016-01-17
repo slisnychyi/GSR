@@ -1,0 +1,27 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <bean id="propertyLocation" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location" value="user.properties"/>
+    </bean>
+
+    <bean id="serviceUtil" class="com.slis.service.SpredsheetServiceUtil">
+        <constructor-arg index="0" value="${serviceAccountId}"/>
+        <constructor-arg index="1">
+            <list>
+                <value>https://spreadsheets.google.com/feeds</value>
+                <value>https://spreadsheets.google.com/feeds/spreadsheets/private/full</value>
+                <value>https://docs.google.com/feeds</value>
+            </list>
+        </constructor-arg>
+        <constructor-arg index="2" value="${p12FilePath}"/>
+    </bean>
+
+    <bean id="spreadSheetReader" class="com.slis.service.SpreadSheetReaderImpl">
+        <constructor-arg ref="serviceUtil"/>
+        <constructor-arg name="googleSpreadSheetURL" value="${spreadsheetUrl}"/>
+    </bean>
+
+</beans>
