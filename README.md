@@ -28,6 +28,13 @@ but you have to change to the following one - https://spreadsheets.google.com/fe
 http://stackoverflow.com/questions/30483601/create-spreadsheet-using-google-spreadsheet-api-in-google-drive-in-java
 http://stackoverflow.com/questions/31503398/google-spreadsheet-api-com-google-gdata-util-parseexception-invalid-root-elem
 
+Create file user.properties in src/main/resources folder and put there 3 keys:
+spreadsheetUrl=https://spreadsheets.google.com/feeds/spreadsheets/****
+serviceAccountId=<google service name>@<project name>.iam.gserviceaccount.com
+p12FilePath=/Users/****
+
+from descripted above.
+
 #####versions:
 
 <table style="width:100%">
