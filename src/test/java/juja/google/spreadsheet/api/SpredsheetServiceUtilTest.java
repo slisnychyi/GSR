@@ -1,4 +1,4 @@
-package juja.google.api;
+package juja.google.spreadsheet.api;
 
 import org.junit.Test;
 

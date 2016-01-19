@@ -1,6 +1,7 @@
-package juja.google.api;
+package juja.google.spreadsheet;
 
 import com.google.gdata.util.ServiceException;
+import juja.google.spreadsheet.api.SpreadSheetReader;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 

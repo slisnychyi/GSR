@@ -1,15 +1,17 @@
-package juja.google.api;
+package juja.google.spreadsheet.api.impl;
 
 import com.google.gdata.client.spreadsheet.SpreadsheetService;
 import com.google.gdata.data.spreadsheet.*;
 import com.google.gdata.util.ServiceException;
+import juja.google.spreadsheet.api.SpreadSheetReader;
+import juja.google.spreadsheet.utils.SpredsheetServiceUtil;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SpreadSheetReaderImpl implements SpreadSheetReader{
+public class SpreadSheetReaderImpl implements SpreadSheetReader {
 
     private final String googleSpreadSheetURL;
     private final SpredsheetServiceUtil spredsheetService;

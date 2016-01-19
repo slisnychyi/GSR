@@ -1,4 +1,4 @@
-package juja.google.api;
+package juja.google.spreadsheet.api;
 
 import com.google.gdata.util.ServiceException;
 
