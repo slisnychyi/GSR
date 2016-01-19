@@ -1,4 +1,4 @@
-package com.slis.service;
+package juja.google.api;
 
 import com.google.gdata.client.spreadsheet.SpreadsheetService;
 import com.google.gdata.data.spreadsheet.*;
@@ -50,9 +50,8 @@ public class SpreadSheetReaderImpl implements SpreadSheetReader{
 
     private SpreadsheetEntry getSpreadSheetEntry(SpreadsheetService service) {
         SpreadsheetEntry result = null;
-        URL googleDocURL;
         try {
-            googleDocURL = new URL(googleSpreadSheetURL);
+            URL googleDocURL = new URL(googleSpreadSheetURL);
             result = service.getEntry(googleDocURL, SpreadsheetEntry.class);
         } catch (IOException | ServiceException e) {
             e.printStackTrace();

@@ -1,4 +1,4 @@
-package com.slis.service;
+package juja.google.api;
 
 import com.google.gdata.util.ServiceException;
 import org.springframework.context.ApplicationContext;
