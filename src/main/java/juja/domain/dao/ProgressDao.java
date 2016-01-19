@@ -1,6 +1,6 @@
 package juja.domain.dao;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * User: viktor
@@ -8,5 +8,5 @@ import java.util.List;
  */
 public interface ProgressDao {
 
-    public List<String> fetchProgressCodes();
+    public Set<String> fetchProgressCodes();
 }
