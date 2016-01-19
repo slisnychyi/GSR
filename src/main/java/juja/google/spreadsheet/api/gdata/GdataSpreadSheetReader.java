@@ -16,8 +16,8 @@ public class GdataSpreadSheetReader implements SpreadSheetReader {
     private final String googleSpreadSheetURL;
     private final SpreadsheetServiceUtil spredsheetService;
 
-    public GdataSpreadSheetReader(SpreadsheetServiceUtil spredsheetService, String googleSpreadSheetURL) {
-        this.spredsheetService = spredsheetService;
+    public GdataSpreadSheetReader(SpreadsheetServiceUtil spreadsheetService, String googleSpreadSheetURL) {
+        this.spredsheetService = spreadsheetService;
         this.googleSpreadSheetURL = googleSpreadSheetURL;
     }
 
