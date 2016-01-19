@@ -5,13 +5,14 @@ import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.gdata.client.spreadsheet.SpreadsheetService;
 import com.google.api.client.json.jackson.JacksonFactory;
+import org.springframework.core.io.ClassPathResource;
 
 import java.io.File;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.List;
 
-public class SpredsheetServiceUtil {
+public class SpreadsheetServiceUtil {
 
     private static final String SERVICE_NAME = "juja_table"; //service name could be any
 
@@ -21,7 +22,7 @@ public class SpredsheetServiceUtil {
     private final HttpTransport httpTransport;
     private final JacksonFactory jsonFactory;
 
-    public SpredsheetServiceUtil(String serviceAccountId, List<String> scopes, String p12FilePath) {
+    public SpreadsheetServiceUtil(String serviceAccountId, List<String> scopes, String p12FilePath) {
         this.serviceAccountId = serviceAccountId;
         this.scopes = scopes;
         this.p12FilePath = p12FilePath;
@@ -31,9 +32,9 @@ public class SpredsheetServiceUtil {
     }
 
     public GoogleCredential generateCredentials(){
-        File p12 = new File(p12FilePath);
         GoogleCredential credential = null;
         try {
+            File p12 = new ClassPathResource(p12FilePath).getFile();
             credential = new GoogleCredential.Builder()
                     .setTransport(httpTransport)
                     .setJsonFactory(jsonFactory)

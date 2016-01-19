@@ -7,7 +7,7 @@
         <property name="location" value="user.properties"/>
     </bean>
 
-    <bean id="serviceUtil" class="juja.google.spreadsheet.utils.SpredsheetServiceUtil">
+    <bean id="serviceUtil" class="juja.google.spreadsheet.utils.SpreadsheetServiceUtil">
         <constructor-arg index="0" value="${serviceAccountId}"/>
         <constructor-arg index="1">
             <list>
@@ -19,7 +19,7 @@
         <constructor-arg index="2" value="${p12FilePath}"/>
     </bean>
 
-    <bean id="spreadSheetReader" class="juja.google.spreadsheet.api.impl.SpreadSheetReaderImpl">
+    <bean id="spreadSheetReader" class="juja.google.spreadsheet.api.gdata.GdataSpreadSheetReader">
         <constructor-arg ref="serviceUtil"/>
         <constructor-arg name="googleSpreadSheetURL" value="${spreadsheetUrl}"/>
     </bean>
