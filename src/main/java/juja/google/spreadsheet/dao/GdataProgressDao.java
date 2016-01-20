@@ -7,7 +7,6 @@ import juja.google.spreadsheet.api.SpreadSheetReader;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class GdataProgressDao implements ProgressDao {
 
@@ -24,9 +23,8 @@ public class GdataProgressDao implements ProgressDao {
     }
 
     @Override
-    public Set<String> fetchProgressCodes() {
-        HashSet<String> progressCodes = new HashSet<>(getColumnValuesFromSpreadsheet());
-        return progressCodes;
+    public List<String> fetchProgressCodes() {
+        return getColumnValuesFromSpreadsheet();
     }
 
     private List<String> getColumnValuesFromSpreadsheet() {

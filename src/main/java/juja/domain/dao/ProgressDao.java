@@ -1,5 +1,6 @@
 package juja.domain.dao;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -8,5 +9,5 @@ import java.util.Set;
  */
 public interface ProgressDao {
 
-    public Set<String> fetchProgressCodes();
+    List<String> fetchProgressCodes();
 }

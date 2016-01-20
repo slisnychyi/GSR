@@ -3,6 +3,7 @@ package juja.google.spreadsheet.dao;
 import juja.google.spreadsheet.api.SpreadSheetReader;
 import org.junit.Test;
 
+import java.util.List;
 import java.util.Set;
 
 import static java.util.Arrays.asList;
@@ -30,10 +31,10 @@ public class GdataProgressDaoTest {
                 thenReturn(asList("+q", "+quiz10", "+q"));
 
         //When
-        Set<String> actualCodes = progressDao.fetchProgressCodes();
+        List<String> actualCodes = progressDao.fetchProgressCodes();
 
         //Then
-        assertThat(actualCodes.size(), is(2));
+        assertThat(actualCodes.size(), is(3));
         assertThat(actualCodes, hasItem("+q"));
         assertThat(actualCodes, hasItem("+quiz10"));
     }
@@ -48,7 +49,7 @@ public class GdataProgressDaoTest {
                 thenReturn(emptyList());
 
         //When
-        Set<String> actualCodes = progressDao.fetchProgressCodes();
+        List<String> actualCodes = progressDao.fetchProgressCodes();
 
         //Then
         assertThat(actualCodes, is(empty()));
