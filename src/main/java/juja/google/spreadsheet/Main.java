@@ -14,7 +14,7 @@ public class Main {
 
         String columnName = "log-код";
         SpreadSheetReader reader = (SpreadSheetReader) context.getBean("spreadSheetReader");
-        List<String> columnValues = reader.getColumnValues(columnName);
+        List<String> columnValues = reader.getColumnValues(columnName, "https://spreadsheets.google.com/feeds/spreadsheets/1rT2bXxtSRFvnQc2of1XBIXy3zh-vlkfRFD476Bw9GQk");
 
         System.out.println(columnValues);
     }

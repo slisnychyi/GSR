@@ -12,7 +12,11 @@ import java.util.Set;
 public class GdataProgressDao implements ProgressDao {
 
     public static final String CODE_COLUMN_NAME = "Log-код";
+    public static String PROGRESS_TOKEN = "1rT2bXxtSRFvnQc2of1XBIXy3zh-vlkfRFD476Bw9GQk";
+
     private SpreadSheetReader spreadSheetReader;
+    String spreadsheetUrlTemplate;
+
 
     public GdataProgressDao(SpreadSheetReader spreadSheetReader) {
 
@@ -27,7 +31,8 @@ public class GdataProgressDao implements ProgressDao {
 
     private List<String> getColumnValuesFromSpreadsheet() {
         try {
-            return spreadSheetReader.getColumnValues(CODE_COLUMN_NAME);
+            String googleSpreadSheetURL = spreadsheetUrlTemplate + PROGRESS_TOKEN;
+            return spreadSheetReader.getColumnValues(CODE_COLUMN_NAME, googleSpreadSheetURL);
         } catch (IOException | ServiceException e) {
             e.printStackTrace();
             return null;

@@ -3,14 +3,13 @@ package juja.google.spreadsheet.dao;
 import juja.google.spreadsheet.api.SpreadSheetReader;
 import org.junit.Test;
 
-import java.util.Collections;
 import java.util.Set;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.collection.IsEmptyCollection.*;
+import static org.hamcrest.collection.IsEmptyCollection.empty;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -26,7 +25,9 @@ public class GdataProgressDaoTest {
         //Given
         SpreadSheetReader spreadSheetReader = mock(SpreadSheetReader.class);
         GdataProgressDao progressDao = new GdataProgressDao(spreadSheetReader);
-        when(spreadSheetReader.getColumnValues("Log-код")).thenReturn(asList("+q", "+quiz10", "+q"));
+        progressDao.spreadsheetUrlTemplate = "https://google.spreadsheet.com/";
+        when(spreadSheetReader.getColumnValues("Log-код", "https://google.spreadsheet.com/1rT2bXxtSRFvnQc2of1XBIXy3zh-vlkfRFD476Bw9GQk")).
+                thenReturn(asList("+q", "+quiz10", "+q"));
 
         //When
         Set<String> actualCodes = progressDao.fetchProgressCodes();
@@ -42,7 +43,9 @@ public class GdataProgressDaoTest {
         //Given
         SpreadSheetReader spreadSheetReader = mock(SpreadSheetReader.class);
         GdataProgressDao progressDao = new GdataProgressDao(spreadSheetReader);
-        when(spreadSheetReader.getColumnValues("Log-код")).thenReturn(emptyList());
+        progressDao.spreadsheetUrlTemplate = "https://google.spreadsheet.com/";
+        when(spreadSheetReader.getColumnValues("Log-код", "https://google.spreadsheet.com/1rT2bXxtSRFvnQc2of1XBIXy3zh-vlkfRFD476Bw9GQk")).
+                thenReturn(emptyList());
 
         //When
         Set<String> actualCodes = progressDao.fetchProgressCodes();

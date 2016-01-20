@@ -6,5 +6,5 @@ import java.io.IOException;
 import java.util.List;
 
 public interface SpreadSheetReader {
-    List<String> getColumnValues (String columnName) throws IOException, ServiceException;
+    List<String> getColumnValues(String columnName, String googleSpreadSheetURL) throws IOException, ServiceException;
 }
