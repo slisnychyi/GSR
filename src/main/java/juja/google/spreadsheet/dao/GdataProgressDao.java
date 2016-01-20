@@ -5,7 +5,6 @@ import juja.domain.dao.ProgressDao;
 import juja.google.spreadsheet.api.SpreadSheetReader;
 
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.List;
 
 public class GdataProgressDao implements ProgressDao {
