@@ -13,7 +13,7 @@ public class Main {
         ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
 
         String columnName = "log-код";
-        SpreadSheetReader reader = (SpreadSheetReader) context.getBean("spreadSheetReader");
+        SpreadSheetReader reader = (SpreadSheetReader) context.getBean("spreadsheetReader");
         List<String> columnValues = reader.getColumnValues(columnName, "https://spreadsheets.google.com/feeds/spreadsheets/1rT2bXxtSRFvnQc2of1XBIXy3zh-vlkfRFD476Bw9GQk");
 
         System.out.println(columnValues);

@@ -19,9 +19,10 @@
         <constructor-arg index="2" value="${p12FilePath}"/>
     </bean>
 
-    <bean id="spreadSheetReader" class="juja.google.spreadsheet.api.gdata.GdataSpreadSheetReader">
-        <constructor-arg ref="serviceUtil"/>
-        <constructor-arg name="googleSpreadSheetURL" value="${spreadsheetUrl}"/>
+    <bean id="spreadsheetService" factory-bean="serviceUtil" factory-method="generateSpreadSheetService"/>
+
+    <bean id="spreadsheetReader" class="juja.google.spreadsheet.api.gdata.GdataSpreadSheetReader">
+        <constructor-arg ref="spreadsheetService"/>
     </bean>
 
 </beans>
