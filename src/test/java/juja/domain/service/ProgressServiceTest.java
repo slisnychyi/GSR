@@ -19,7 +19,7 @@ import static org.mockito.Mockito.when;
 public class ProgressServiceTest {
 
     @InjectMocks
-    private ProgressService service = new ProgressServiceImpl();
+    private ProgressServiceImpl service = new ProgressServiceImpl();
 
     @Mock
     private ProgressDao progressDao;
@@ -36,5 +36,21 @@ public class ProgressServiceTest {
         assertThat(actualProgressCodes, hasSize(2));
         assertThat(actualProgressCodes, hasItem("+code1"));
         assertThat(actualProgressCodes, hasItem("+code2"));
+    }
+
+    @Test
+    public void shouldExcludeBlackListedCodes() throws Exception {
+        //Given
+        service.setCodesBlackList("+blackListCode1;+blackListCode2");
+        when(progressDao.fetchProgressCodes()).thenReturn(asList("+code1", "+blackListCode1", "+blackListCode2", "+code2"));
+
+        //When
+        Set<String> actualProgressCodes = service.fetchProgressCodes();
+
+        //Then
+        assertThat(actualProgressCodes, hasSize(2));
+        assertThat(actualProgressCodes, hasItem("+code1"));
+        assertThat(actualProgressCodes, hasItem("+code2"));
+
     }
 }
