@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/JuniorsJava/GSR.png?label=ready&title=Ready)](https://waffle.io/JuniorsJava/GSR)
 ## GoogleSpreadSheetReader
 
 ### Instruction:
