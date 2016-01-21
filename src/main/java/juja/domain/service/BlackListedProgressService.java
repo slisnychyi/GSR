@@ -9,7 +9,7 @@ import java.util.Set;
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toSet;
 
-public class ProgressServiceImpl implements ProgressService {
+public class BlackListedProgressService implements ProgressService {
 
     ProgressDao progressDao;
     private Set<String> codesBlackList = Collections.emptySet();

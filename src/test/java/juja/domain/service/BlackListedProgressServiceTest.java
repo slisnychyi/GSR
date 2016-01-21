@@ -16,10 +16,10 @@ import static org.hamcrest.core.IsCollectionContaining.hasItem;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ProgressServiceTest {
+public class BlackListedProgressServiceTest {
 
     @InjectMocks
-    private ProgressServiceImpl service = new ProgressServiceImpl();
+    private BlackListedProgressService service = new BlackListedProgressService();
 
     @Mock
     private ProgressDao progressDao;
