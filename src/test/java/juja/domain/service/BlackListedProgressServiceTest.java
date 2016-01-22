@@ -1,6 +1,7 @@
 package juja.domain.service;
 
 import juja.domain.dao.ProgressDao;
+import juja.domain.model.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -13,6 +14,7 @@ import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -51,7 +53,17 @@ public class BlackListedProgressServiceTest {
         assertThat(actualProgressCodes, hasSize(2));
         assertThat(actualProgressCodes, hasItem("+code1"));
         assertThat(actualProgressCodes, hasItem("+code2"));
+    }
 
+    @Test
+    public void shouldMarkProgressByCodes() throws Exception {
+        //Given
+        User user = User.create().withSlackNick("slackNick").build();
+        //When
+        service.markProgress(user, "+quiz1", "+quiz2");
+
+        //Then
+        verify(progressDao).markProgressForUser("slackNick", "+quiz1", "+quiz2");
     }
 
     //TODO negative scenario

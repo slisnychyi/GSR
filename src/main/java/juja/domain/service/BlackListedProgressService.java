@@ -1,6 +1,7 @@
 package juja.domain.service;
 
 import juja.domain.dao.ProgressDao;
+import juja.domain.model.User;
 
 import javax.inject.Inject;
 import java.util.Collections;
@@ -21,6 +22,11 @@ public class BlackListedProgressService implements ProgressService {
     public Set<String> fetchProgressCodes() {
         return progressDao.fetchProgressCodes().stream().
                 filter(code -> !codesBlackList.contains(code)).collect(toSet());
+    }
+
+    @Override
+    public void markProgress(User user, String... codes) {
+        throw new UnsupportedOperationException();
     }
 
     public void setCodesBlackList(String codesBlackList) {

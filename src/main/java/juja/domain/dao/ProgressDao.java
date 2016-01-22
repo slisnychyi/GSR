@@ -9,4 +9,6 @@ import java.util.List;
 public interface ProgressDao {
 
     List<String> fetchProgressCodes();
+
+    void markProgressForUser(String slackNick, String ...codes);
 }

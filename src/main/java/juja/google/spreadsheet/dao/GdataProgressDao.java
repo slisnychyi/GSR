@@ -29,6 +29,11 @@ public class GdataProgressDao implements ProgressDao {
         return getColumnValuesFromSpreadsheet();
     }
 
+    @Override
+    public void markProgressForUser(String slackNick, String... codes) {
+        throw new UnsupportedOperationException();
+    }
+
     private List<String> getColumnValuesFromSpreadsheet() {
         try {
             String googleSpreadSheetURL = spreadsheetUrlTemplate + PROGRESS_TOKEN;
