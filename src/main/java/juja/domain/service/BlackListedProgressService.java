@@ -2,6 +2,7 @@ package juja.domain.service;
 
 import juja.domain.dao.ProgressDao;
 
+import javax.inject.Inject;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -11,7 +12,9 @@ import static java.util.stream.Collectors.toSet;
 
 public class BlackListedProgressService implements ProgressService {
 
+    @Inject
     ProgressDao progressDao;
+
     private Set<String> codesBlackList = Collections.emptySet();
 
     @Override

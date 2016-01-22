@@ -10,12 +10,27 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws IOException, ServiceException {
-        ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
-
+        SpreadSheetReader reader = getSpreadSheetReader();
         String columnName = "log-код";
-        SpreadSheetReader reader = (SpreadSheetReader) context.getBean("spreadsheetReader");
         List<String> columnValues = reader.getColumnValues(columnName, "https://spreadsheets.google.com/feeds/spreadsheets/1rT2bXxtSRFvnQc2of1XBIXy3zh-vlkfRFD476Bw9GQk");
 
         System.out.println(columnValues);
     }
+
+    private static SpreadSheetReader getSpreadSheetReader() {
+        ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+        return (SpreadSheetReader) context.getBean("spreadsheetReader");
+    }
+
+//    private static SpreadSheetReader getSpreadSheetReader() {
+//        Guice.createInjector(binder -> {
+//
+//            binder.bind(SpreadSheetReader.class).to(GdataSpreadSheetReader.class);
+//            binder.bind(ProgressDao.class).to(GdataProgressDao.class);
+//
+//        });
+//        ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+//        return (SpreadSheetReader) context.getBean("spreadsheetReader");
+//    }
+
 }
