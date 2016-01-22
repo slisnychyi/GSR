@@ -5,6 +5,7 @@ import com.google.gdata.data.spreadsheet.*;
 import com.google.gdata.util.ServiceException;
 import juja.google.spreadsheet.api.SpreadSheetReader;
 
+import javax.inject.Inject;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ public class GdataSpreadSheetReader implements SpreadSheetReader {
 
     final SpreadsheetService gdataService;
 
+    @Inject
     public GdataSpreadSheetReader(SpreadsheetService service) {
         this.gdataService = service;
     }

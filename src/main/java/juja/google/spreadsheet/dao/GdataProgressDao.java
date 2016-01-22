@@ -1,25 +1,27 @@
 package juja.google.spreadsheet.dao;
 
 import com.google.gdata.util.ServiceException;
+import com.google.inject.name.Named;
 import juja.domain.dao.ProgressDao;
 import juja.google.spreadsheet.api.SpreadSheetReader;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.io.IOException;
 import java.util.List;
 
-@Component
+@Singleton
 public class GdataProgressDao implements ProgressDao {
 
     public static final String CODE_COLUMN_NAME = "Log-код";
     public static String PROGRESS_TOKEN = "1rT2bXxtSRFvnQc2of1XBIXy3zh-vlkfRFD476Bw9GQk";
 
     private SpreadSheetReader spreadSheetReader;
-    @Value("${google.spreadsheet.url.template}")
+    @Inject
+    @Named("google.spreadsheet.url.template")
     String spreadsheetUrlTemplate;
 
-
+    @Inject
     public GdataProgressDao(SpreadSheetReader spreadSheetReader) {
         this.spreadSheetReader = spreadSheetReader;
     }

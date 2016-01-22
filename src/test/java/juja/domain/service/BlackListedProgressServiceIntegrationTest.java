@@ -1,8 +1,10 @@
 package juja.domain.service;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import juja.domain.di.ApplicationModule;
+import org.junit.BeforeClass;
 import org.junit.Test;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.Set;
 
@@ -13,16 +15,24 @@ import static org.junit.Assert.assertThat;
 
 public class BlackListedProgressServiceIntegrationTest {
 
+    private static Injector injector;
+
+
+    @BeforeClass
+    public static void createInjector() {
+        injector = Guice.createInjector(new ApplicationModule());
+    }
+
     @Test
     public void fetchCodesFromRealSpreadsheet() throws Exception {
-        ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
-
-        ProgressService progressService = context.getBean("progressService", ProgressService.class);
+        ProgressService progressService = injector.getInstance(ProgressService.class);
 
         Set<String> progressCodes = progressService.fetchProgressCodes();
+        progressCodes = progressService.fetchProgressCodes();
 
-        System.out.println(progressCodes);
         assertThat(progressCodes, hasSize(251));
         assertThat(progressCodes, not(hasItem("")));
     }
+
+
 }
