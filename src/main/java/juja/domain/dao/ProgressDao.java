@@ -10,5 +10,5 @@ public interface ProgressDao {
 
     List<String> fetchProgressCodes();
 
-    void markProgressForUser(String slackNick, String ...codes);
+    void markProgressForUser(String userId, String ...codes);
 }

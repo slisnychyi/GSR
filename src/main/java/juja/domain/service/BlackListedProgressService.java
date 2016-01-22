@@ -26,7 +26,7 @@ public class BlackListedProgressService implements ProgressService {
 
     @Override
     public void markProgress(User user, String... codes) {
-        throw new UnsupportedOperationException();
+        progressDao.markProgressForUser(user.slackNickName, codes);
     }
 
     public void setCodesBlackList(String codesBlackList) {
