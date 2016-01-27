@@ -21,31 +21,31 @@ public class GdataSpreadSheetReader implements SpreadSheetReader {
     }
 
     public List<String> getColumnValues(String columnName, String googleSpreadSheetURL) throws IOException, ServiceException {
-        List<String> result = new ArrayList<>();
-        SpreadsheetEntry spreadsheet = getSpreadSheetEntry(gdataService, googleSpreadSheetURL);
-
-        if(spreadsheet != null){
-            List<WorksheetEntry> worksheets = spreadsheet.getWorksheets();
-            for (WorksheetEntry worksheet : worksheets) {
-                String title = worksheet.getTitle().getPlainText();
-                int rowCount = worksheet.getRowCount();
-                int colCount = worksheet.getColCount();
-                System.out.println("\t" + title + "- rows:" + rowCount + " cols: " + colCount);
-
-                URL listFeedUrl = worksheet.getListFeedUrl();
-                ListFeed listFeed = gdataService.getFeed(listFeedUrl, ListFeed.class);
-
-                for (ListEntry row : listFeed.getEntries()) {
-                    CustomElementCollection customElements = row.getCustomElements();
-                    String colValue = customElements.getValue(columnName); //"log-код"
-                    if(colValue!= null && !colValue.equals("null")){
-                        result.add(colValue);
-                    }
-                }
-
-            }
-        }
-        return result;
+        List<ListEntry> rows = readRows(gdataService);
+        return filterColumnValues(rows, columnName);
+//        SpreadsheetEntry spreadsheet = getSpreadSheetEntry(gdataService, googleSpreadSheetURL);
+//        if(spreadsheet != null){
+//            List<WorksheetEntry> worksheets = spreadsheet.getWorksheets();
+//            for (WorksheetEntry worksheet : worksheets) {
+//                String title = worksheet.getTitle().getPlainText();
+//                int rowCount = worksheet.getRowCount();
+//                int colCount = worksheet.getColCount();
+//                System.out.println("\t" + title + "- readRows:" + rowCount + " cols: " + colCount);
+//
+//                URL listFeedUrl = worksheet.getListFeedUrl();
+//                ListFeed listFeed = gdataService.getFeed(listFeedUrl, ListFeed.class);
+//
+//                for (ListEntry row : listFeed.getEntries()) {
+//                    CustomElementCollection customElements = row.getCustomElements();
+//                    String colValue = customElements.getValue(columnName); //"log-код"
+//                    if(colValue!= null && !colValue.equals("null")){
+//                        result.add(colValue);
+//                    }
+//                }
+//
+//            }
+//        }
+//        return result;
     }
 
     private static SpreadsheetEntry getSpreadSheetEntry(SpreadsheetService service, String googleSpreadSheetURL) {
@@ -61,4 +61,13 @@ public class GdataSpreadSheetReader implements SpreadSheetReader {
 
     }
 
+    public List<ListEntry> readRows(SpreadsheetService service) {
+        // TODO implement
+        throw new UnsupportedOperationException();
+    }
+
+    public List<String> filterColumnValues(List<ListEntry> rows, String columnName) {
+        //TODO implement
+        throw new UnsupportedOperationException();
+    }
 }

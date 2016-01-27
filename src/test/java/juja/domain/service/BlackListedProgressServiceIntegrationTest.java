@@ -28,7 +28,6 @@ public class BlackListedProgressServiceIntegrationTest {
         ProgressService progressService = injector.getInstance(ProgressService.class);
 
         Set<String> progressCodes = progressService.fetchProgressCodes();
-        progressCodes = progressService.fetchProgressCodes();
 
         assertThat(progressCodes, hasSize(251));
         assertThat(progressCodes, not(hasItem("")));
