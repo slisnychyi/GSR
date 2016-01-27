@@ -2,7 +2,7 @@ package juja.domain.service;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import juja.domain.di.ApplicationModule;
+import juja.domain.di.GSRApplicationModule;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -20,7 +20,7 @@ public class BlackListedProgressServiceIntegrationTest {
 
     @BeforeClass
     public static void createInjector() {
-        injector = Guice.createInjector(new ApplicationModule());
+        injector = Guice.createInjector(new GSRApplicationModule());
     }
 
     @Test

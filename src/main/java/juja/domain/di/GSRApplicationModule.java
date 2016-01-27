@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-public class ApplicationModule implements Module {
+public class GSRApplicationModule implements Module {
 
     @Override
     public void configure(Binder binder) {
