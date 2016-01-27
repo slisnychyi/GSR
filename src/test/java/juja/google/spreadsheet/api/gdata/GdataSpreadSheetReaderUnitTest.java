@@ -10,6 +10,7 @@ import java.util.List;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
 import static org.mockito.Mockito.*;
 
@@ -87,6 +88,41 @@ public class GdataSpreadSheetReaderUnitTest {
         assertThat(values, hasItem("row1"));
         assertThat(values, hasItem("row2"));
     }
+
+    @Test
+    public void excludeNullColumnValues() throws Exception {
+        //Given
+        GdataSpreadSheetReader spreadsheet = spy(new GdataSpreadSheetReader(mock(SpreadsheetService.class)));
+
+        //When
+        ListEntry row1 = prepareRow("columnName", "null");
+        ListEntry row2 = prepareRow("columnName", "row2");
+        List rows = asList(row1, row2);
+
+        List<String> values = spreadsheet.extractColumnValues(rows, "columnName");
+
+        //Then
+        assertThat(values, hasSize(1));
+        assertThat(values, hasItem("row2"));
+    }
+
+    @Test
+    public void excludeNullColumnReferences() throws Exception {
+        //Given
+        GdataSpreadSheetReader spreadsheet = spy(new GdataSpreadSheetReader(mock(SpreadsheetService.class)));
+
+        //When
+        ListEntry row1 = prepareRow("columnName", null);
+        ListEntry row2 = prepareRow("columnName", "row2");
+        List rows = asList(row1, row2);
+
+        List<String> values = spreadsheet.extractColumnValues(rows, "columnName");
+
+        //Then
+        assertThat(values, hasSize(1));
+        assertThat(values, hasItem("row2"));
+    }
+
 
     private ListEntry prepareRow(String columnName, String columnValue) {
         ListEntry row = mock(ListEntry.class);

@@ -8,8 +8,9 @@ import juja.google.spreadsheet.api.SpreadSheetReader;
 import javax.inject.Inject;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class GdataSpreadSheetReader implements SpreadSheetReader {
 
@@ -40,14 +41,10 @@ public class GdataSpreadSheetReader implements SpreadSheetReader {
     }
 
     public List<String> extractColumnValues(List<ListEntry> rows, String columnName) {
-        List<String> result = new ArrayList<>();
-        for (ListEntry row : rows) {
+        return rows.stream().map(row -> {
             CustomElementCollection customElements = row.getCustomElements();
-            String colValue = customElements.getValue(columnName); //"log-код"
-            if (colValue != null && !colValue.equals("null")) {
-                result.add(colValue);
-            }
-        }
-        return result;
+            String colValue = customElements.getValue(columnName);
+            return colValue;
+        }).filter(value -> !Optional.ofNullable(value).orElse("null").equals("null")).collect(Collectors.toList());
     }
 }
