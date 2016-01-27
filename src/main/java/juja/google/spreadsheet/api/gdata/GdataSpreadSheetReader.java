@@ -21,53 +21,33 @@ public class GdataSpreadSheetReader implements SpreadSheetReader {
     }
 
     public List<String> getColumnValues(String columnName, String googleSpreadSheetURL) throws IOException, ServiceException {
-        List<ListEntry> rows = readRows(gdataService);
-        return filterColumnValues(rows, columnName);
-//        SpreadsheetEntry spreadsheet = getSpreadSheetEntry(gdataService, googleSpreadSheetURL);
-//        if(spreadsheet != null){
-//            List<WorksheetEntry> worksheets = spreadsheet.getWorksheets();
-//            for (WorksheetEntry worksheet : worksheets) {
-//                String title = worksheet.getTitle().getPlainText();
-//                int rowCount = worksheet.getRowCount();
-//                int colCount = worksheet.getColCount();
-//                System.out.println("\t" + title + "- readRows:" + rowCount + " cols: " + colCount);
-//
-//                URL listFeedUrl = worksheet.getListFeedUrl();
-//                ListFeed listFeed = gdataService.getFeed(listFeedUrl, ListFeed.class);
-//
-//                for (ListEntry row : listFeed.getEntries()) {
-//                    CustomElementCollection customElements = row.getCustomElements();
-//                    String colValue = customElements.getValue(columnName); //"log-код"
-//                    if(colValue!= null && !colValue.equals("null")){
-//                        result.add(colValue);
-//                    }
-//                }
-//
-//            }
-//        }
-//        return result;
+        List<ListEntry> rows = readRows(gdataService, googleSpreadSheetURL);
+        return extractColumnValues(rows, columnName);
     }
 
-    private static SpreadsheetEntry getSpreadSheetEntry(SpreadsheetService service, String googleSpreadSheetURL) {
-        SpreadsheetEntry result = null;
-        try {
-            URL googleDocURL = new URL(googleSpreadSheetURL);
-            result = service.getEntry(googleDocURL, SpreadsheetEntry.class);
-        } catch (IOException | ServiceException e) {
-            //TODO throw custom exception
-            e.printStackTrace();
+    public WorksheetEntry getDefaultWorkSheetEntry(SpreadsheetService service, String googleSpreadSheetURL) throws IOException, ServiceException {
+        SpreadsheetEntry spreadsheet = service.getEntry(new URL(googleSpreadSheetURL), SpreadsheetEntry.class);
+
+        return spreadsheet.getDefaultWorksheet();
+    }
+
+    public List<ListEntry> readRows(SpreadsheetService service, String url) throws IOException, ServiceException {
+        WorksheetEntry worksheet = getDefaultWorkSheetEntry(service, url);
+
+        URL listFeedUrl = worksheet.getListFeedUrl();
+        ListFeed feed = service.getFeed(listFeedUrl, ListFeed.class);
+        return feed.getEntries();
+    }
+
+    public List<String> extractColumnValues(List<ListEntry> rows, String columnName) {
+        List<String> result = new ArrayList<>();
+        for (ListEntry row : rows) {
+            CustomElementCollection customElements = row.getCustomElements();
+            String colValue = customElements.getValue(columnName); //"log-код"
+            if (colValue != null && !colValue.equals("null")) {
+                result.add(colValue);
+            }
         }
         return result;
-
-    }
-
-    public List<ListEntry> readRows(SpreadsheetService service) {
-        // TODO implement
-        throw new UnsupportedOperationException();
-    }
-
-    public List<String> filterColumnValues(List<ListEntry> rows, String columnName) {
-        //TODO implement
-        throw new UnsupportedOperationException();
     }
 }
