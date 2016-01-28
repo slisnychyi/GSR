@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.Arrays.asList;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.Is.is;
@@ -157,10 +159,10 @@ public class GdataSpreadSheetReaderUnitTest {
         doReturn(row).when(spreadsheet).findRowByColumnValue(header, code);
 
         //When
-        Cell cell = spreadsheet.findCellByColumnValue("searchColumn", header, "first");
+        Cell cell = spreadsheet.findCellByColumnValue("searchColumn", header, code);
 
         //Then
-        assertThat(cell, is(notNull()));
+        assertThat(cell, is(not(nullValue())));
     }
 
     private ListEntry prepareRow(String columnHeader, String columnValue) {
