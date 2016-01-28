@@ -8,5 +8,5 @@ public interface ProgressService {
 
     Set<String> fetchProgressCodes();
 
-    void markProgress(User user, String ...codes);
+    void markProgressDone(User user, String ...codes);
 }

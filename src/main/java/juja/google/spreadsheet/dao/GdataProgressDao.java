@@ -2,6 +2,7 @@ package juja.google.spreadsheet.dao;
 
 import com.google.gdata.util.ServiceException;
 import juja.domain.dao.ProgressDao;
+import juja.google.spreadsheet.api.Cell;
 import juja.google.spreadsheet.api.SpreadSheetReader;
 
 import javax.inject.Inject;
@@ -9,11 +10,12 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Stream;
 
 @Singleton
 public class GdataProgressDao implements ProgressDao {
 
-    public static final String CODE_COLUMN_NAME = "Log-код";
+    public static final String CODE_COLUMN_NAME = "log-код";
 
     private SpreadSheetReader spreadSheetReader;
 
@@ -29,7 +31,19 @@ public class GdataProgressDao implements ProgressDao {
 
     @Override
     public void markProgressForUser(String slackNick, String... codes) {
-        throw new UnsupportedOperationException();
+        Stream.of(codes).forEach(code -> {
+            Cell cell = spreadSheetReader.findCellByColumnValue(slackNick, CODE_COLUMN_NAME, code);
+            updateCellAndHandleExceptions(cell);
+        });
+    }
+
+    private void updateCellAndHandleExceptions(Cell cell){
+        try {
+            cell.update("DONE");
+        } catch (IOException | ServiceException e) {
+            //TODO process exception
+            e.printStackTrace();
+        }
     }
 
     private List<String> getColumnValuesFromSpreadsheet() {

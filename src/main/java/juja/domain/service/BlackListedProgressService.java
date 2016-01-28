@@ -25,7 +25,7 @@ public class BlackListedProgressService implements ProgressService {
     }
 
     @Override
-    public void markProgress(User user, String... codes) {
+    public void markProgressDone(User user, String... codes) {
         progressDao.markProgressForUser(user.slackNickName, codes);
     }
 

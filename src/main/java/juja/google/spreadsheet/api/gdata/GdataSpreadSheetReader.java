@@ -3,7 +3,8 @@ package juja.google.spreadsheet.api.gdata;
 import com.google.gdata.client.spreadsheet.SpreadsheetService;
 import com.google.gdata.data.spreadsheet.*;
 import com.google.gdata.util.ServiceException;
-import juja.google.spreadsheet.api.SpreadSheetReader;
+import juja.google.spreadsheet.api.*;
+import juja.google.spreadsheet.api.Cell;
 
 import javax.inject.Inject;
 import java.io.IOException;
@@ -51,6 +52,11 @@ public class GdataSpreadSheetReader implements SpreadSheetReader {
             String actual = Optional.ofNullable(r.getCustomElements().getValue(header)).orElse("");
             return actual.equals(value);
         }).findFirst().get();
+    }
+
+    @Override
+    public Cell findCellByColumnValue(String searchColumn, String header, String value) {
+        throw new UnsupportedOperationException();
     }
 
     public List<String> extractColumnValues(List<ListEntry> rows, String columnName) {
