@@ -54,6 +54,7 @@ public class BlackListedProgressServiceIntegrationTest {
 
         progressService.markProgressDone(User.create().withSlackNick("viktorkuchyn").build(), "+lms");
 
+        progressCell = new GdataCell(spreadsheet, "viktorkuchyn", "log-код", "+lms");
         assertThat(progressCell.value(), is("DONE"));
     }
 }
