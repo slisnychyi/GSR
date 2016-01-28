@@ -27,4 +27,21 @@ public class GdataCellTest {
         verify(row).update();
         assertThat(elementCollection.getValue("userid"), is(value));
     }
+
+    @Test
+    public void returnValue() throws Exception {
+        SpreadSheetReader spreadsheet = mock(SpreadSheetReader.class);
+        ListEntry row = mock(ListEntry.class);
+        when(spreadsheet.findRow("log-code", "+lms")).thenReturn(row);
+        GdataCell cell = spy(new GdataCell(spreadsheet, "userid", "log-code", "+lms"));
+
+        CustomElementCollection elementCollection = new CustomElementCollection();
+        when(row.getCustomElements()).thenReturn(elementCollection);
+        elementCollection.setValueLocal("userid", "newValue");
+
+        String expected = "newValue";
+        String actual = cell.value();
+
+        assertThat(actual, is(expected));
+    }
 }

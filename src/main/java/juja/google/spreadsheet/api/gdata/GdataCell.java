@@ -28,7 +28,7 @@ public class GdataCell implements Cell {
 
     @Override
     public String value() {
-        throw new UnsupportedOperationException();
+        return this.entry.getCustomElements().getValue(header);
     }
 
 }
