@@ -10,6 +10,7 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 import java.io.IOException;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 @Singleton
@@ -31,19 +32,19 @@ public class GdataProgressDao implements ProgressDao {
 
     @Override
     public void markProgressForUser(String slackNick, String... codes) {
-        Stream.of(codes).forEach(code -> {
-            Cell cell = spreadSheetReader.findCellByColumnValue(slackNick, CODE_COLUMN_NAME, code);
-            updateCellAndHandleExceptions(cell);
-        });
+        Stream.of(codes).forEach(findAndUpdateCellAndHandleExceptions(slackNick));
     }
 
-    private void updateCellAndHandleExceptions(Cell cell){
-        try {
-            cell.update("DONE");
-        } catch (IOException | ServiceException e) {
-            //TODO process exception
-            e.printStackTrace();
-        }
+    private Consumer<String> findAndUpdateCellAndHandleExceptions(String slackNick) {
+        return (code) -> {
+            try {
+                Cell cell = spreadSheetReader.findCellByColumnValue(slackNick, CODE_COLUMN_NAME, code);
+                cell.update("DONE");
+            } catch (IOException | ServiceException e) {
+                //TODO process exception
+                e.printStackTrace();
+            }
+        };
     }
 
     private List<String> getColumnValuesFromSpreadsheet() {

@@ -2,6 +2,7 @@ package juja.google.spreadsheet.api.gdata;
 
 import com.google.gdata.client.spreadsheet.SpreadsheetService;
 import com.google.gdata.data.spreadsheet.*;
+import juja.google.spreadsheet.api.Cell;
 import org.junit.Test;
 
 import java.net.URL;
@@ -143,6 +144,23 @@ public class GdataSpreadSheetReaderUnitTest {
 
         //Then
         assertThat(row, is(first));
+    }
+
+    @Test
+    public void findCellByColumn() throws Exception {
+        GdataSpreadSheetReader spreadsheet = spy(new GdataSpreadSheetReader(mock(SpreadsheetService.class), "url"));
+
+        String header = "columnHeader";
+        String code = "+lms";
+        ListEntry row = prepareRow(header, code);
+
+        doReturn(row).when(spreadsheet).findRowByColumnValue(header, code);
+
+        //When
+        Cell cell = spreadsheet.findCellByColumnValue("searchColumn", header, "first");
+
+        //Then
+        assertThat(cell, is(notNull()));
     }
 
     private ListEntry prepareRow(String columnHeader, String columnValue) {

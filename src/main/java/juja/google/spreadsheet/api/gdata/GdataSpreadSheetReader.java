@@ -55,8 +55,8 @@ public class GdataSpreadSheetReader implements SpreadSheetReader {
     }
 
     @Override
-    public Cell findCellByColumnValue(String searchColumn, String header, String value) {
-        throw new UnsupportedOperationException();
+    public Cell findCellByColumnValue(String searchColumn, String header, String value) throws IOException, ServiceException {
+        return new GdataCell(this, searchColumn, header, value);
     }
 
     public List<String> extractColumnValues(List<ListEntry> rows, String columnName) {

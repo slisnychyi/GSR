@@ -9,5 +9,4 @@ public interface Cell {
     void update(String value) throws IOException, ServiceException;
 
     String value();
-
 }

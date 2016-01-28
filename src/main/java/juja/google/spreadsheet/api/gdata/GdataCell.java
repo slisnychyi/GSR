@@ -13,9 +13,9 @@ public class GdataCell implements Cell {
     private final String header;
 
     public GdataCell(
-            SpreadSheetReader spreadsheet, String searchColimn, String colName, String colValue
+            SpreadSheetReader spreadsheet, String searchColumn, String colName, String colValue
     ) throws IOException, ServiceException {
-        this.header = searchColimn;
+        this.header = searchColumn;
 
         entry = spreadsheet.findRowByColumnValue(colName, colValue);
     }
