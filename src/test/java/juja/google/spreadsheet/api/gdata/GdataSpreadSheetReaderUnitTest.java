@@ -20,14 +20,15 @@ public class GdataSpreadSheetReaderUnitTest {
     public void shouldGetColumnValues() throws Exception {
         //Given
         SpreadsheetService service = mock(SpreadsheetService.class);
-        GdataSpreadSheetReader spreadsheet = spy(new GdataSpreadSheetReader(service));
+        String url = "url";
+        GdataSpreadSheetReader spreadsheet = spy(new GdataSpreadSheetReader(service, url));
 
         List<ListEntry> rows = new ArrayList<>();
-        doReturn(rows).when(spreadsheet).readRows(service, "url");
+        doReturn(rows).when(spreadsheet).readRows();
         doReturn(asList("row1", "row2")).when(spreadsheet).extractColumnValues(rows, "col");
 
         //When
-        List<String> columns = spreadsheet.getColumnValues("col", "url");
+        List<String> columns = spreadsheet.getColumnValues("col");
 
         //Then
         assertThat(columns, hasItem("row1"));
@@ -37,15 +38,17 @@ public class GdataSpreadSheetReaderUnitTest {
     @Test
     public void shouldGetSpreadsheetEntry() throws Exception {
         //Given
+        String key = "key";
+        URL url = new URL(GdataSpreadSheetReader.TEMPLATE + key);
         SpreadsheetService service = mock(SpreadsheetService.class);
-        GdataSpreadSheetReader spreadsheet = spy(new GdataSpreadSheetReader(service));
+        GdataSpreadSheetReader spreadsheet = spy(new GdataSpreadSheetReader(service, key));
 
         SpreadsheetEntry spreadsheetEntry = mock(SpreadsheetEntry.class);
-        URL url = new URL("file://url");
+
         when(service.getEntry(url, SpreadsheetEntry.class)).thenReturn(spreadsheetEntry);
 
         //When
-        spreadsheet.getDefaultWorkSheetEntry(service, "file://url");
+        spreadsheet.getDefaultWorkSheetEntry(service);
 
         //Then
         verify(service).getEntry(url, SpreadsheetEntry.class);
@@ -56,17 +59,18 @@ public class GdataSpreadSheetReaderUnitTest {
     public void getRowsForSpreadsheetEntry() throws Exception {
         //Given
         SpreadsheetService service = mock(SpreadsheetService.class);
-        GdataSpreadSheetReader spreadsheet = spy(new GdataSpreadSheetReader(service));
+        String url = "file://url";
+        GdataSpreadSheetReader spreadsheet = spy(new GdataSpreadSheetReader(service, url));
 
         WorksheetEntry worksheetEntry = mock(WorksheetEntry.class);
-        String url = "file://url";
-        doReturn(worksheetEntry).when(spreadsheet).getDefaultWorkSheetEntry(service, url);
+
+        doReturn(worksheetEntry).when(spreadsheet).getDefaultWorkSheetEntry(service);
         when(worksheetEntry.getListFeedUrl()).thenReturn(new URL(url));
         ListFeed listFeed = mock(ListFeed.class);
         when(service.getFeed(new URL(url), ListFeed.class)).thenReturn(listFeed);
 
         //When
-        spreadsheet.readRows(service, url);
+        spreadsheet.readRows();
 
         //Then
         verify(listFeed).getEntries();
@@ -75,7 +79,7 @@ public class GdataSpreadSheetReaderUnitTest {
     @Test
     public void filterRowsByColumnName() throws Exception {
         //Given
-        GdataSpreadSheetReader spreadsheet = spy(new GdataSpreadSheetReader(mock(SpreadsheetService.class)));
+        GdataSpreadSheetReader spreadsheet = spy(new GdataSpreadSheetReader(mock(SpreadsheetService.class), "url"));
 
         //When
         ListEntry row1 = prepareRow("columnName", "row1");
@@ -92,7 +96,7 @@ public class GdataSpreadSheetReaderUnitTest {
     @Test
     public void excludeNullColumnValues() throws Exception {
         //Given
-        GdataSpreadSheetReader spreadsheet = spy(new GdataSpreadSheetReader(mock(SpreadsheetService.class)));
+        GdataSpreadSheetReader spreadsheet = spy(new GdataSpreadSheetReader(mock(SpreadsheetService.class), "url"));
 
         //When
         ListEntry row1 = prepareRow("columnName", "null");
@@ -109,7 +113,7 @@ public class GdataSpreadSheetReaderUnitTest {
     @Test
     public void excludeNullColumnReferences() throws Exception {
         //Given
-        GdataSpreadSheetReader spreadsheet = spy(new GdataSpreadSheetReader(mock(SpreadsheetService.class)));
+        GdataSpreadSheetReader spreadsheet = spy(new GdataSpreadSheetReader(mock(SpreadsheetService.class), "url"));
 
         //When
         ListEntry row1 = prepareRow("columnName", null);
@@ -122,7 +126,6 @@ public class GdataSpreadSheetReaderUnitTest {
         assertThat(values, hasSize(1));
         assertThat(values, hasItem("row2"));
     }
-
 
     private ListEntry prepareRow(String columnName, String columnValue) {
         ListEntry row = mock(ListEntry.class);
