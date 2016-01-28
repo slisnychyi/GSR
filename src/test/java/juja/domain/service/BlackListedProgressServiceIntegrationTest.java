@@ -2,13 +2,21 @@ package juja.domain.service;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.Key;
+import com.google.inject.name.Names;
 import juja.domain.di.GSRApplicationModule;
+import juja.domain.model.User;
+import juja.google.spreadsheet.api.Cell;
+import juja.google.spreadsheet.api.SpreadSheetReader;
+import juja.google.spreadsheet.api.gdata.GdataCell;
+import juja.google.spreadsheet.api.gdata.GdataSpreadSheetReader;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.Set;
 
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
 import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertThat;
@@ -33,5 +41,19 @@ public class BlackListedProgressServiceIntegrationTest {
         assertThat(progressCodes, not(hasItem("")));
     }
 
+    @Test
+    public void markProgressForUser() throws Exception {
+        ProgressService progressService = injector.getInstance(ProgressService.class);
+        SpreadSheetReader spreadsheet = injector.getInstance(
+                Key.get(SpreadSheetReader.class,
+                        Names.named("progress"))
+        );
 
+        Cell progressCell = new GdataCell(spreadsheet, "viktorkuchyn", "log-код", "+lms");
+        progressCell.update("");
+
+        progressService.markProgressDone(User.create().withSlackNick("viktorkuchyn").build(), "+lms");
+
+        assertThat(progressCell.value(), is("DONE"));
+    }
 }

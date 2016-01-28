@@ -46,8 +46,11 @@ public class GdataSpreadSheetReader implements SpreadSheetReader {
     }
 
     @Override
-    public ListEntry findRow(String colName, String colValue) {
-        throw new UnsupportedOperationException();
+    public ListEntry findRowByColumnValue(String header, String value) throws IOException, ServiceException {
+        return readRows().stream().filter(r -> {
+            String actual = Optional.ofNullable(r.getCustomElements().getValue(header)).orElse("");
+            return actual.equals(value);
+        }).findFirst().get();
     }
 
     public List<String> extractColumnValues(List<ListEntry> rows, String columnName) {

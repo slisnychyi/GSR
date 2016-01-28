@@ -15,7 +15,7 @@ public class GdataCellTest {
     public void updateValue() throws Exception {
         SpreadSheetReader spreadsheet = mock(SpreadSheetReader.class);
         ListEntry row = mock(ListEntry.class);
-        when(spreadsheet.findRow("log-code", "+lms")).thenReturn(row);
+        when(spreadsheet.findRowByColumnValue("log-code", "+lms")).thenReturn(row);
         GdataCell cell = spy(new GdataCell(spreadsheet, "userid", "log-code", "+lms"));
 
         CustomElementCollection elementCollection = new CustomElementCollection();
@@ -32,7 +32,7 @@ public class GdataCellTest {
     public void returnValue() throws Exception {
         SpreadSheetReader spreadsheet = mock(SpreadSheetReader.class);
         ListEntry row = mock(ListEntry.class);
-        when(spreadsheet.findRow("log-code", "+lms")).thenReturn(row);
+        when(spreadsheet.findRowByColumnValue("log-code", "+lms")).thenReturn(row);
         GdataCell cell = spy(new GdataCell(spreadsheet, "userid", "log-code", "+lms"));
 
         CustomElementCollection elementCollection = new CustomElementCollection();

@@ -60,7 +60,7 @@ public class BlackListedProgressServiceTest {
         //Given
         User user = User.create().withSlackNick("slackNick").build();
         //When
-        service.markProgress(user, "+quiz1", "+quiz2");
+        service.markProgressDone(user, "+quiz1", "+quiz2");
 
         //Then
         verify(progressDao).markProgressForUser("slackNick", "+quiz1", "+quiz2");

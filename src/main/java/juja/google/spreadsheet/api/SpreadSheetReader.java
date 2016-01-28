@@ -12,6 +12,6 @@ public interface SpreadSheetReader {
 
     List<ListEntry> readRows() throws IOException, ServiceException;
 
-    ListEntry findRow(String colName, String colValue);
+    ListEntry findRowByColumnValue(String colName, String colValue) throws IOException, ServiceException;
 
 }

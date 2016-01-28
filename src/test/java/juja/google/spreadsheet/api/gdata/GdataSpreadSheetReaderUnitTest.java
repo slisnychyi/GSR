@@ -11,6 +11,7 @@ import java.util.List;
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
 import static org.mockito.Mockito.*;
 
@@ -127,11 +128,28 @@ public class GdataSpreadSheetReaderUnitTest {
         assertThat(values, hasItem("row2"));
     }
 
-    private ListEntry prepareRow(String columnName, String columnValue) {
+    @Test
+    public void findRowByColumnHeaderAndColumnValue() throws Exception {
+        GdataSpreadSheetReader spreadsheet = spy(new GdataSpreadSheetReader(mock(SpreadsheetService.class), "url"));
+
+        String header = "columnHeader";
+        ListEntry first = prepareRow(header, "first");
+        ListEntry second = prepareRow(header, "second");
+
+        doReturn(asList(first, second)).when(spreadsheet).readRows();
+
+        //When
+        ListEntry row = spreadsheet.findRowByColumnValue(header, "first");
+
+        //Then
+        assertThat(row, is(first));
+    }
+
+    private ListEntry prepareRow(String columnHeader, String columnValue) {
         ListEntry row = mock(ListEntry.class);
         CustomElementCollection elementCollection = mock(CustomElementCollection.class);
         when(row.getCustomElements()).thenReturn(elementCollection);
-        when(elementCollection.getValue(columnName)).thenReturn(columnValue);
+        when(elementCollection.getValue(columnHeader)).thenReturn(columnValue);
         return row;
     }
 }

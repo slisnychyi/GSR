@@ -17,7 +17,7 @@ public class GdataCell implements Cell {
     ) throws IOException, ServiceException {
         this.header = header;
 
-        entry = spreadsheet.findRow(colName, colValue);
+        entry = spreadsheet.findRowByColumnValue(colName, colValue);
     }
 
     @Override
