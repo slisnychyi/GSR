@@ -5,6 +5,8 @@ import com.google.gdata.data.spreadsheet.*;
 import com.google.gdata.util.ServiceException;
 import juja.google.spreadsheet.api.*;
 import juja.google.spreadsheet.api.Cell;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.inject.Inject;
 import java.io.IOException;
@@ -16,6 +18,7 @@ import java.util.stream.Collectors;
 
 public class GdataSpreadSheetReader implements SpreadSheetReader {
 
+    private static final Logger logger = LogManager.getLogger(GdataSpreadSheetReader.class.getName());
     final static String TEMPLATE = "https://spreadsheets.google.com/feeds/spreadsheets/";
 
     final SpreadsheetService gdataService;

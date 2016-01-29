@@ -4,6 +4,8 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson.JacksonFactory;
 import com.google.gdata.client.spreadsheet.SpreadsheetService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -17,6 +19,7 @@ import static java.util.Arrays.asList;
 
 public class SpreadsheetServiceProvider implements Provider<SpreadsheetService> {
 
+    private static final Logger logger = LogManager.getLogger(SpreadsheetServiceProvider.class.getName());
     private static final String SERVICE_NAME = "juja_table"; //service name could be any
 
     @Inject
@@ -44,8 +47,8 @@ public class SpreadsheetServiceProvider implements Provider<SpreadsheetService> 
                     .setServiceAccountPrivateKeyFromP12File(p12)
                     .build();
         } catch (GeneralSecurityException | IOException | URISyntaxException e) {
-            e.printStackTrace();
-            // TODO exception on startup
+            String message = "Cannot generate google credentials for connection.";
+            logger.error(message, e);
         }
         return credential;
     }
