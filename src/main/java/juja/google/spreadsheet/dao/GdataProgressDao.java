@@ -45,6 +45,7 @@ public class GdataProgressDao implements ProgressDao {
                 Cell cell = spreadSheetReader.findCellByColumnValue(slackNick, CODE_COLUMN_NAME, code);
                 cell.update("DONE");
             } catch (IOException | ServiceException e) {
+                //TODO process exception
                 String message = "Can't get data. Due to exception.";
                 logger.error(message, e);
             }
@@ -55,6 +56,7 @@ public class GdataProgressDao implements ProgressDao {
         try {
             return spreadSheetReader.getColumnValues(CODE_COLUMN_NAME);
         } catch (IOException | ServiceException e) {
+            //TODO process exception
             String message = "Can't get data. Due to exception.";
             logger.error(message, e);
             return null;
