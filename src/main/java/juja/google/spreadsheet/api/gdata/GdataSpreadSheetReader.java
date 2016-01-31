@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
 
 public class GdataSpreadSheetReader implements SpreadSheetReader {
 
-    private static final Logger logger = LogManager.getLogger(GdataSpreadSheetReader.class.getName());
     final static String TEMPLATE = "https://spreadsheets.google.com/feeds/spreadsheets/";
 
     final SpreadsheetService gdataService;
