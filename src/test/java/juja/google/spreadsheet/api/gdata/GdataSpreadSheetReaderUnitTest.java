@@ -165,12 +165,15 @@ public class GdataSpreadSheetReaderUnitTest {
 
         String header = "columnHeader";
         String code = "+lms";
+        String searchColumn = "searchColumn";
         ListEntry row = prepareRow(header, code);
 
+
         doReturn(row).when(spreadsheet).findRowByColumnValue(header, code);
+        doReturn(true).when(spreadsheet).isHeaderExist(searchColumn);
 
         //When
-        Cell cell = spreadsheet.findCellByColumnValue("searchColumn", header, code);
+        Cell cell = spreadsheet.findCellByColumnValue(searchColumn, header, code);
 
         //Then
         assertThat(cell, is(not(nullValue())));
