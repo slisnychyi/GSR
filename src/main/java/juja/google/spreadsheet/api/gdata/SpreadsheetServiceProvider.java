@@ -38,7 +38,8 @@ public class SpreadsheetServiceProvider implements Provider<SpreadsheetService> 
     public GoogleCredential generateCredentials(){
         GoogleCredential credential = null;
         try {
-            File p12 = new File(this.getClass().getResource("/" + p12FilePath).toURI());
+            //File p12 = new File(this.getClass().getResource("/" + p12FilePath).toURI());
+            File p12 = new File(p12FilePath);
             credential = new GoogleCredential.Builder()
                     .setTransport(new NetHttpTransport())
                     .setJsonFactory(new JacksonFactory())
@@ -46,7 +47,7 @@ public class SpreadsheetServiceProvider implements Provider<SpreadsheetService> 
                     .setServiceAccountScopes(asList(scopes.split(";")))
                     .setServiceAccountPrivateKeyFromP12File(p12)
                     .build();
-        } catch (GeneralSecurityException | IOException | URISyntaxException e) {
+        } catch (GeneralSecurityException | IOException e) {
             String message = "Cannot generate google credentials for connection.";
             logger.error(message, e);
         }

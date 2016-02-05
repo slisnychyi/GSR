@@ -3,10 +3,13 @@ package juja.google.spreadsheet.api.gdata;
 import com.google.gdata.client.spreadsheet.SpreadsheetService;
 import com.google.gdata.data.spreadsheet.*;
 import juja.google.spreadsheet.api.Cell;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import static java.util.Arrays.asList;
@@ -19,6 +22,14 @@ import static org.hamcrest.core.IsCollectionContaining.hasItem;
 import static org.mockito.Mockito.*;
 
 public class GdataSpreadSheetReaderUnitTest {
+
+    private ListEntry prepareRow(String columnHeader, String columnValue) {
+        ListEntry row = mock(ListEntry.class);
+        CustomElementCollection elementCollection = mock(CustomElementCollection.class);
+        when(row.getCustomElements()).thenReturn(elementCollection);
+        when(elementCollection.getValue(columnHeader)).thenReturn(columnValue);
+        return row;
+    }
 
     @Test
     public void shouldGetColumnValues() throws Exception {
@@ -165,11 +176,26 @@ public class GdataSpreadSheetReaderUnitTest {
         assertThat(cell, is(not(nullValue())));
     }
 
-    private ListEntry prepareRow(String columnHeader, String columnValue) {
-        ListEntry row = mock(ListEntry.class);
-        CustomElementCollection elementCollection = mock(CustomElementCollection.class);
-        when(row.getCustomElements()).thenReturn(elementCollection);
-        when(elementCollection.getValue(columnHeader)).thenReturn(columnValue);
-        return row;
+
+
+    @Test
+    public void ifHeaderExist() throws Exception {
+        GdataSpreadSheetReader reader = mock(GdataSpreadSheetReader.class);
+        String header = "a";
+        when(reader.getRowValues(0)).thenReturn(new HashSet<>(Arrays.asList("a", "b", "c")));
+        when(reader.isHeaderExist(header)).thenCallRealMethod();
+        boolean headerExist = reader.isHeaderExist(header);
+        Assert.assertTrue(headerExist);
     }
+
+    @Test
+    public void ifHeaderNotExist() throws Exception {
+        GdataSpreadSheetReader reader = mock(GdataSpreadSheetReader.class);
+        String header = "d";
+        when(reader.getRowValues(0)).thenReturn(new HashSet<>(Arrays.asList("a", "b", "c")));
+        when(reader.isHeaderExist(header)).thenCallRealMethod();
+        boolean headerExist = reader.isHeaderExist(header);
+        Assert.assertFalse(headerExist);
+    }
+
 }
