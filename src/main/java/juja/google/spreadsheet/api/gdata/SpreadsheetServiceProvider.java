@@ -47,6 +47,7 @@ public class SpreadsheetServiceProvider implements Provider<SpreadsheetService> 
                     .setServiceAccountPrivateKeyFromP12File(p12)
                     .build();
         } catch (GeneralSecurityException | IOException | URISyntaxException e) {
+            // TODO exception on startup
             String message = "Cannot generate google credentials for connection.";
             logger.error(message, e);
         }

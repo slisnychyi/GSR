@@ -52,6 +52,7 @@ public class GdataSpreadSheetReader implements SpreadSheetReader {
 
     public List<ListEntry> readRows() throws IOException, ServiceException {
         WorksheetEntry worksheet = getDefaultWorkSheetEntry(gdataService);
+
         URL listFeedUrl = worksheet.getListFeedUrl();
         ListFeed feed = gdataService.getFeed(listFeedUrl, ListFeed.class);
         return feed.getEntries();
