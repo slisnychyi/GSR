@@ -13,13 +13,13 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class GdataSpreadSheetReader implements SpreadSheetReader {
 
     private final static String NULL_VALUE = "null";
     private final static int HEADER_ROW_NUM = 0;
-    private static final Logger logger = LogManager.getLogger(GdataSpreadSheetReader.class.getName());
     final static String TEMPLATE = "https://spreadsheets.google.com/feeds/spreadsheets/";
 
     final SpreadsheetService gdataService;
@@ -29,6 +29,14 @@ public class GdataSpreadSheetReader implements SpreadSheetReader {
     public GdataSpreadSheetReader(SpreadsheetService service, String key) throws MalformedURLException {
         this.gdataService = service;
         this.url = new URL(TEMPLATE + key);
+    }
+
+    public static Predicate<String> isNotNull(){
+        return p -> !Optional.ofNullable(p).orElse(NULL_VALUE).equals(NULL_VALUE);
+    }
+
+    public static Predicate<String> isNotEmpty(){
+        return p -> p.trim().length() > 0;
     }
 
     public List<String> getColumnValues(String columnName) throws IOException, ServiceException {
@@ -49,12 +57,6 @@ public class GdataSpreadSheetReader implements SpreadSheetReader {
         return feed.getEntries();
     }
 
-    private CellFeed getCellFeed() throws IOException, ServiceException {
-        WorksheetEntry worksheet = getDefaultWorkSheetEntry(gdataService);
-        URL listFeedUrl = worksheet.getCellFeedUrl();
-        return gdataService.getFeed(listFeedUrl, CellFeed.class);
-    }
-
     @Override
     public ListEntry findRowByColumnValue(String header, String value) throws IOException, ServiceException {
         return readRows().stream().filter(r -> {
@@ -65,38 +67,21 @@ public class GdataSpreadSheetReader implements SpreadSheetReader {
 
     @Override
     public Cell findCellByColumnValue(String searchColumn, String header, String value) throws IOException, ServiceException {
-        if(!isHeaderExist(searchColumn)) createNewHeader(searchColumn);
+        if (!isHeaderExist(searchColumn)) createNewHeader(searchColumn);
         return new GdataCell(this, searchColumn, header, value);
     }
 
     public List<String> extractColumnValues(List<ListEntry> rows, String columnName) {
         return rows.stream().map(row -> {
             CustomElementCollection customElements = row.getCustomElements();
-            String colValue = customElements.getValue(columnName);
-            return colValue;
-        }).filter(
-                value -> !Optional.ofNullable(value).orElse(NULL_VALUE).equals(NULL_VALUE)
+            return customElements.getValue(columnName);
+        }).filter(isNotNull()
         ).collect(Collectors.toList());
-    }
-
-    public Set<String> getRowValues(int rowNum) throws ServiceException, IOException {
-        List<ListEntry> rows = readRows();
-        Set<String> slackIds = new HashSet<>();
-        if (rows.size() > 1) {
-            CustomElementCollection elements = rows.get(rowNum).getCustomElements();
-            for (String header : elements.getTags()) {
-                String value = elements.getValue(header);
-                if (value != null && !NULL_VALUE.equals(value.trim()) && value.trim().length() > 0) {
-                    slackIds.add(value);
-                }
-            }
-        }
-        return slackIds;
     }
 
     @Override
     public CellEntry createNewHeader(String header) throws IOException, ServiceException {
-        int gDataRowNum = HEADER_ROW_NUM+1;
+        int gDataRowNum = HEADER_ROW_NUM + 1;
         int maxColumnNumber = getColumnNumber(HEADER_ROW_NUM);
         CellFeed cellFeed = getCellFeed();
         CellEntry newColumn = new CellEntry(gDataRowNum, maxColumnNumber + 1, header);
@@ -108,6 +93,27 @@ public class GdataSpreadSheetReader implements SpreadSheetReader {
         Set<String> rowValues = getRowValues(HEADER_ROW_NUM);
         return rowValues.contains(header);
     }
+
+    @Override
+    public Set<String> getRowValues(int rowNum) throws ServiceException, IOException {
+        List<ListEntry> rows = readRows();
+        if (rows.size() > 0) {
+            CustomElementCollection elements = rows.get(rowNum).getCustomElements();
+            return elements.getTags().stream()
+                    .map(elements::getValue)
+                    .filter(isNotNull().and(isNotEmpty()))
+                    .collect(Collectors.toSet());
+        } else {
+            return new HashSet<>();
+        }
+    }
+
+    private CellFeed getCellFeed() throws IOException, ServiceException {
+        WorksheetEntry worksheet = getDefaultWorkSheetEntry(gdataService);
+        URL listFeedUrl = worksheet.getCellFeedUrl();
+        return gdataService.getFeed(listFeedUrl, CellFeed.class);
+    }
+
 
     private int getColumnNumber(int rowNum) throws IOException, ServiceException {
         return readRows().get(rowNum).getCustomElements().getTags().size();

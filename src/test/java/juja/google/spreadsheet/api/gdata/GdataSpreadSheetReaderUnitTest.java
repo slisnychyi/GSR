@@ -2,15 +2,15 @@ package juja.google.spreadsheet.api.gdata;
 
 import com.google.gdata.client.spreadsheet.SpreadsheetService;
 import com.google.gdata.data.spreadsheet.*;
+import com.google.gdata.util.ServiceException;
 import juja.google.spreadsheet.api.Cell;
 import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.stubbing.Answer;
 
+import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.not;
@@ -22,14 +22,6 @@ import static org.hamcrest.core.IsCollectionContaining.hasItem;
 import static org.mockito.Mockito.*;
 
 public class GdataSpreadSheetReaderUnitTest {
-
-    private ListEntry prepareRow(String columnHeader, String columnValue) {
-        ListEntry row = mock(ListEntry.class);
-        CustomElementCollection elementCollection = mock(CustomElementCollection.class);
-        when(row.getCustomElements()).thenReturn(elementCollection);
-        when(elementCollection.getValue(columnHeader)).thenReturn(columnValue);
-        return row;
-    }
 
     @Test
     public void shouldGetColumnValues() throws Exception {
@@ -97,8 +89,8 @@ public class GdataSpreadSheetReaderUnitTest {
         GdataSpreadSheetReader spreadsheet = spy(new GdataSpreadSheetReader(mock(SpreadsheetService.class), "url"));
 
         //When
-        ListEntry row1 = prepareRow("columnName", "row1");
-        ListEntry row2 = prepareRow("columnName", "row2");
+        ListEntry row1 = prepareRowWithMockHeaderAndValue("columnName", "row1");
+        ListEntry row2 = prepareRowWithMockHeaderAndValue("columnName", "row2");
         List rows = asList(row1, row2);
 
         List<String> values = spreadsheet.extractColumnValues(rows, "columnName");
@@ -114,8 +106,8 @@ public class GdataSpreadSheetReaderUnitTest {
         GdataSpreadSheetReader spreadsheet = spy(new GdataSpreadSheetReader(mock(SpreadsheetService.class), "url"));
 
         //When
-        ListEntry row1 = prepareRow("columnName", "null");
-        ListEntry row2 = prepareRow("columnName", "row2");
+        ListEntry row1 = prepareRowWithMockHeaderAndValue("columnName", "null");
+        ListEntry row2 = prepareRowWithMockHeaderAndValue("columnName", "row2");
         List rows = asList(row1, row2);
 
         List<String> values = spreadsheet.extractColumnValues(rows, "columnName");
@@ -131,8 +123,8 @@ public class GdataSpreadSheetReaderUnitTest {
         GdataSpreadSheetReader spreadsheet = spy(new GdataSpreadSheetReader(mock(SpreadsheetService.class), "url"));
 
         //When
-        ListEntry row1 = prepareRow("columnName", null);
-        ListEntry row2 = prepareRow("columnName", "row2");
+        ListEntry row1 = prepareRowWithMockHeaderAndValue("columnName", null);
+        ListEntry row2 = prepareRowWithMockHeaderAndValue("columnName", "row2");
         List rows = asList(row1, row2);
 
         List<String> values = spreadsheet.extractColumnValues(rows, "columnName");
@@ -147,8 +139,8 @@ public class GdataSpreadSheetReaderUnitTest {
         GdataSpreadSheetReader spreadsheet = spy(new GdataSpreadSheetReader(mock(SpreadsheetService.class), "url"));
 
         String header = "columnHeader";
-        ListEntry first = prepareRow(header, "first");
-        ListEntry second = prepareRow(header, "second");
+        ListEntry first = prepareRowWithMockHeaderAndValue(header, "first");
+        ListEntry second = prepareRowWithMockHeaderAndValue(header, "second");
 
         doReturn(asList(first, second)).when(spreadsheet).readRows();
 
@@ -166,7 +158,7 @@ public class GdataSpreadSheetReaderUnitTest {
         String header = "columnHeader";
         String code = "+lms";
         String searchColumn = "searchColumn";
-        ListEntry row = prepareRow(header, code);
+        ListEntry row = prepareRowWithMockHeaderAndValue(header, code);
 
 
         doReturn(row).when(spreadsheet).findRowByColumnValue(header, code);
@@ -199,6 +191,45 @@ public class GdataSpreadSheetReaderUnitTest {
         when(reader.isHeaderExist(header)).thenCallRealMethod();
         boolean headerExist = reader.isHeaderExist(header);
         Assert.assertFalse(headerExist);
+    }
+
+    @Test
+    public void getRowValuesWithoutNull() throws IOException, ServiceException {
+        GdataSpreadSheetReader reader = spy(new GdataSpreadSheetReader(mock(SpreadsheetService.class), "url"));
+        //params
+        int rowNum = 0;
+        Set<String> tags = new HashSet<>(Arrays.asList("a","b","c","d"));
+        Map<String, String> headerValues = new HashMap<>();
+        headerValues.put("a", "null");
+        headerValues.put("b", "value");
+        headerValues.put("c", "");
+        headerValues.put("d", null);
+        //mocks
+        List<ListEntry> entries = Collections.singletonList(prepareRowWithMockHeadersAndValues(headerValues, tags));
+        doReturn(entries).when(reader).readRows();
+        //expected result
+        Set<String> expected = new HashSet<>(Collections.singletonList("value"));
+        //assert
+        Assert.assertEquals(expected, reader.getRowValues(rowNum));
+    }
+
+    private ListEntry prepareRowWithMockHeaderAndValue(String columnHeader, String columnValue) {
+        ListEntry row = mock(ListEntry.class);
+        CustomElementCollection elementCollection = mock(CustomElementCollection.class);
+        when(row.getCustomElements()).thenReturn(elementCollection);
+        when(elementCollection.getValue(columnHeader)).thenReturn(columnValue);
+        return row;
+    }
+
+    private ListEntry prepareRowWithMockHeadersAndValues(Map<String, String> headerValues, Set<String> tags) {
+        ListEntry row = mock(ListEntry.class);
+        CustomElementCollection elementCollection = mock(CustomElementCollection.class);
+        when(row.getCustomElements()).thenReturn(elementCollection);
+        when(elementCollection.getTags()).thenReturn(tags);
+        for (Map.Entry<String, String> entry : headerValues.entrySet()) {
+            when(elementCollection.getValue(entry.getKey())).thenReturn(entry.getValue());
+        }
+        return row;
     }
 
 }

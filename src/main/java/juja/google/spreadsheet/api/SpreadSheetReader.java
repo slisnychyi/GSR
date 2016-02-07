@@ -19,7 +19,9 @@ public interface SpreadSheetReader {
     Cell findCellByColumnValue(String searchColumn, String header, String value) throws IOException, ServiceException;
 
     boolean isHeaderExist(String value) throws IOException, ServiceException;
+
     CellEntry createNewHeader(String header) throws IOException, ServiceException;
+
     Set<String> getRowValues(int rowNum) throws ServiceException, IOException;
 
 }

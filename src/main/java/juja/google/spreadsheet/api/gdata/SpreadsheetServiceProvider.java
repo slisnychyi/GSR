@@ -39,7 +39,6 @@ public class SpreadsheetServiceProvider implements Provider<SpreadsheetService> 
         GoogleCredential credential = null;
         try {
             File p12 = new File(this.getClass().getResource("/" + p12FilePath).toURI());
-            //File p12 = new File(p12FilePath);
             credential = new GoogleCredential.Builder()
                     .setTransport(new NetHttpTransport())
                     .setJsonFactory(new JacksonFactory())
