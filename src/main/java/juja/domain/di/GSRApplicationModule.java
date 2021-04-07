@@ -38,4 +38,22 @@ public class GSRApplicationModule implements Module {
         binder.bind(SpreadSheetReader.class).annotatedWith(Names.named("progress")).toProvider(ProgressSpreadsheetProvider.class);
 
     }
+
+    public void configure2(Binder binder) {
+        Properties properties = new Properties();
+        try {
+            InputStream resourceStream = this.getClass().getResourceAsStream("/user.properties");
+
+            properties.load(resourceStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Names.bindProperties(binder, properties);
+        binder.bind(ProgressService.class).to(BlackListedProgressService.class);
+        binder.bind(ProgressDao.class).to(GdataProgressDao.class);
+        binder.bind(SpreadsheetService.class).toProvider(SpreadsheetServiceProvider.class).in(Singleton.class);
+        binder.bind(SpreadSheetReader.class).annotatedWith(Names.named("progress")).toProvider(ProgressSpreadsheetProvider.class);
+
+    }
 }
