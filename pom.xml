@@ -12,6 +12,9 @@
         <spring.version>4.1.4.RELEASE</spring.version>
         <google.lib.version>1.20.0</google.lib.version>
         <log4j.version>2.5</log4j.version>
+        <sonar.projectKey>sLisnychyi_GSR</sonar.projectKey>
+        <sonar.organization>slisnychyi</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
 
     <build>
