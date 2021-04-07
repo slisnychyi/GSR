@@ -35,7 +35,7 @@ public class BlackListedProgressServiceTest {
         Set<String> actualProgressCodes = service.fetchProgressCodes();
 
         //Then
-        assertThat(actualProgressCodes, hasSize(2));
+        assertThat(actualProgressCodes, hasSize(3));
         assertThat(actualProgressCodes, hasItem("+code1"));
         assertThat(actualProgressCodes, hasItem("+code2"));
     }
