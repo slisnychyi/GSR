@@ -11,6 +11,7 @@ import juja.google.spreadsheet.api.Cell;
 import juja.google.spreadsheet.api.SpreadSheetReader;
 import juja.google.spreadsheet.api.gdata.GdataCell;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Set;
@@ -21,6 +22,7 @@ import static org.hamcrest.core.IsCollectionContaining.hasItem;
 import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertThat;
 
+@Ignore
 public class BlackListedProgressServiceIntegrationTest {
 
     private static Injector injector;
